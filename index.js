@@ -24,6 +24,8 @@ async function run() {
   try {
      client.connect();
       const menuCollection = client.db("menudata").collection("food");
+      const userCollection = client.db("menudata").collection("user");
+      const bookCollection = client.db("menudata").collection("table");
       app.get('/menus', async(req,res)=>{
       const menus = await menuCollection.find({}).toArray();
     
@@ -40,7 +42,25 @@ async function run() {
       res.send(food)
   })
     
-
+    //USER
+    app.get('/user', async (req, res) => {
+      const user = await userCollection.find({}).toArray()
+     
+      res.send(user)
+    })
+  app.post('/user', async (req, res) => {
+  const user = req.body;
+  const result = await userCollection.insertOne(user);
+  res.send(result);
+  });
+    
+    // Book Table all route
+    
+    app.post('/book', async (req, res) => {
+      const booktable = req.body
+      const result = await bookCollection.insertOne(booktable)
+      res.send(result)
+    })
   } finally {
     // Ensure that the client will close when you finish/error
     await client.close();
