@@ -54,8 +54,11 @@ async function run() {
   res.send(result);
   });
     
-    // Book Table all route
-    
+    // Book Table all route 
+    app.get('/book', async (req, res) => {
+      const books =await bookCollection.find({}).toArray()
+      res.send(books)
+    })
     app.post('/book', async (req, res) => {
       const booktable = req.body
       const result = await bookCollection.insertOne(booktable)
@@ -63,7 +66,7 @@ async function run() {
     })
   } finally {
     // Ensure that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 
