@@ -93,6 +93,11 @@ app.post('/review', async (req, res) => {
       const books =await bookCollection.find({}).toArray()
       res.send(books)
     })
+    app.get('/mybook/:email', async (req, res) => {
+      const email = req.params.email;
+      const books =await bookCollection.find({ email: email }).toArray()
+      res.send(books)
+    })
     app.post('/book', async (req, res) => {
       const booktable = req.body
       const result = await bookCollection.insertOne(booktable)
