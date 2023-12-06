@@ -26,6 +26,14 @@ async function run() {
       const menuCollection = client.db("menudata").collection("food");
       const userCollection = client.db("menudata").collection("user");
       const bookCollection = client.db("menudata").collection("table");
+    const reviewCollection = client.db("menudata").collection("review");
+    
+    app.post('/addFood', async (req, res) => {
+  const menus = req.body;
+      const result = await menuCollection.insertOne(menus);
+      console.log(result, "34 line");
+  res.send(result);
+  });
       app.get('/menus', async(req,res)=>{
       const menus = await menuCollection.find({}).toArray();
     
@@ -40,14 +48,33 @@ async function run() {
           const food = await menuCollection.findOne(qurey)
         
       res.send(food)
-  })
+      })
+    // Review 
+    app.get('/allreview', async(req,res)=>{
+      const reviews = await reviewCollection.find({}).toArray();
+    
+      res.send(reviews);
+     
+      })
+app.post('/review', async (req, res) => {
+  const review = req.body;
+  const result = await reviewCollection.insertOne(review);
+  res.send(result);
+  });
     
     //USER
     app.get('/admin/:email', async (req, res) => {
     const email = req.params.email;
-      const user = await userCollection.findOne({ em: email });
-      const isAdmin = user?.user?.role === 'admin';
+      const user = await userCollection.findOne({ email: email });
+      const isAdmin = user?.role === 'admin';
     res.send({ admin: isAdmin })
+    
+  })
+    app.get('/profile/:email', async (req, res) => {
+    const email = req.params.email;
+      const user = await userCollection.findOne({ email: email });
+      
+    res.send(user)
     
   })
     app.get('/user', async (req, res) => {
