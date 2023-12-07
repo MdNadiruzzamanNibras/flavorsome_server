@@ -26,6 +26,7 @@ async function run() {
       const menuCollection = client.db("menudata").collection("food");
       const userCollection = client.db("menudata").collection("user");
       const bookCollection = client.db("menudata").collection("table");
+      const orderCollection = client.db("menudata").collection("order");
     const reviewCollection = client.db("menudata").collection("review");
     
     app.post('/addFood', async (req, res) => {
@@ -73,7 +74,7 @@ app.post('/review', async (req, res) => {
     app.get('/profile/:email', async (req, res) => {
     const email = req.params.email;
       const user = await userCollection.findOne({ email: email });
-      
+      console.log(user);
     res.send(user)
     
   })
@@ -88,6 +89,14 @@ app.post('/review', async (req, res) => {
   res.send(result);
   });
     
+    
+    // order 
+  app.post('/order', async (req, res) => {
+  const orders = req.body;
+  const result = await orderCollection.insertOne(orders);
+  res.send(result);
+  });
+    
     // Book Table all route 
     app.get('/book', async (req, res) => {
       const books =await bookCollection.find({}).toArray()
@@ -95,7 +104,8 @@ app.post('/review', async (req, res) => {
     })
     app.get('/mybook/:email', async (req, res) => {
       const email = req.params.email;
-      const books =await bookCollection.find({ email: email }).toArray()
+      const books = await bookCollection.find({ email: email }).toArray()
+      console.log(books, "kdk");
       res.send(books)
     })
     app.post('/book', async (req, res) => {
