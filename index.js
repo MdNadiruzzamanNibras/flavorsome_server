@@ -88,7 +88,18 @@ app.post('/review', async (req, res) => {
   const result = await userCollection.insertOne(user);
   res.send(result);
   });
+    app.put('/update/:email', async (req, res) => {
+  const { email } = req.params; 
+  const updateUser = req.body; 
+
+      const result = await userCollection.updateOne({ email:email },
+        { $set: updateUser },
+      { upsert: true });
     
+     
+     res.send(result)
+  
+});
     
     
     // order
@@ -99,6 +110,7 @@ app.post('/review', async (req, res) => {
     })
     app.get('/myorder/:email', async (req, res) => {
       const email = req.params.email
+      console.log(email);
       const orders =await orderCollection.find({email: email}).toArray()
       res.send(orders)
     })
