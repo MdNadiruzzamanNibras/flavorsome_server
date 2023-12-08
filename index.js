@@ -32,7 +32,7 @@ async function run() {
     app.post('/addFood', async (req, res) => {
   const menus = req.body;
       const result = await menuCollection.insertOne(menus);
-      console.log(result, "34 line");
+     
   res.send(result);
   });
       app.get('/menus', async(req,res)=>{
@@ -74,7 +74,7 @@ app.post('/review', async (req, res) => {
     app.get('/profile/:email', async (req, res) => {
     const email = req.params.email;
       const user = await userCollection.findOne({ email: email });
-      console.log(user);
+     
     res.send(user)
     
   })
@@ -90,10 +90,22 @@ app.post('/review', async (req, res) => {
   });
     
     
-    // order 
+    
+    // order
+
+    app.get('/order', async (req, res) => {
+      const orders =await orderCollection.find({}).toArray()
+      res.send(orders)
+    })
+    app.get('/myorder/:email', async (req, res) => {
+      const email = req.params.email
+      const orders =await orderCollection.find({email: email}).toArray()
+      res.send(orders)
+    })
   app.post('/order', async (req, res) => {
   const orders = req.body;
-  const result = await orderCollection.insertOne(orders);
+    const result = await orderCollection.insertOne(orders);
+    console.log(result);
   res.send(result);
   });
     
@@ -105,7 +117,7 @@ app.post('/review', async (req, res) => {
     app.get('/mybook/:email', async (req, res) => {
       const email = req.params.email;
       const books = await bookCollection.find({ email: email }).toArray()
-      console.log(books, "kdk");
+
       res.send(books)
     })
     app.post('/book', async (req, res) => {
